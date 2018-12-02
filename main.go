@@ -14,6 +14,7 @@ func init() {
 
 func main() {
 	entries := gpm.ScanFile("/home/morpheus/Documents/hm.txt")
+	gpm.IndexEntries(entries)
 	gpm.ShowEntries(entries)
 
 	gpm.Run()

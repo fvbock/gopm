@@ -9,6 +9,7 @@ type TUI struct {
 	app        *tview.Application
 	inputField *tview.InputField
 	textView   *tview.TextView
+	statusView *tview.TextView
 	layout     *tview.Flex
 }
 
@@ -26,6 +27,12 @@ func NewTUI() (tui *TUI) {
 	tui.textView = tview.NewTextView().
 		SetDynamicColors(true).
 		SetRegions(true).
+		SetWordWrap(true).
+		SetChangedFunc(func() {
+			tui.app.Draw()
+		})
+
+	tui.statusView = tview.NewTextView().
 		SetWordWrap(true).
 		SetChangedFunc(func() {
 			tui.app.Draw()
@@ -76,7 +83,8 @@ func NewTUI() (tui *TUI) {
 	tui.layout = tview.NewFlex().
 		SetDirection(tview.FlexRow).
 		AddItem(tui.inputField, 1, 1, true).
-		AddItem(tui.textView, 0, 1, false)
+		AddItem(tui.textView, 0, 1, false).
+		AddItem(tui.statusView, 1, 1, false)
 
 	return
 }

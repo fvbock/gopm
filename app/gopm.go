@@ -15,14 +15,20 @@ type GoPM struct {
 	tui         *TUI
 	prefixIndex *trie.Trie
 	fullIndex   *trie.Trie
+	titleIndex  map[string]*Entry
 }
 
-func NewGoPMApp() *GoPM {
-	return &GoPM{
+func NewGoPMApp() (gopm *GoPM) {
+	gopm = &GoPM{
 		tui:         NewTUI(),
 		prefixIndex: trie.NewTrie(),
 		fullIndex:   trie.NewTrie(),
+		titleIndex:  make(map[string]*Entry),
 	}
+
+	gopm.tui.inputField.SetChangedFunc(gopm.FindEntries)
+
+	return
 }
 
 func (gpm *GoPM) Run() {
@@ -67,6 +73,30 @@ func (gpm *GoPM) ScanFile(fname string) (entries []*Entry) {
 	return
 }
 
+func (gpm *GoPM) IndexEntries(entries []*Entry) {
+	for _, entry := range entries {
+		parts := strings.Fields(entry.Title)
+		for _, part := range parts {
+			gpm.titleIndex[strings.ToLower(part)] = entry
+		}
+	}
+}
+
+func (gpm *GoPM) FindEntries(term string) {
+	results := []*Entry{}
+	var buffer bytes.Buffer
+	for key, entry := range gpm.titleIndex {
+		// buffer.WriteString(fmt.Sprintf("%s <> %s\n", key, term))
+		if strings.Contains(key, strings.ToLower(term)) {
+			results = append(results, entry)
+		}
+	}
+	buffer.WriteString(fmt.Sprintf("%v results\n", len(results)))
+	gpm.tui.statusView.SetText(buffer.String())
+
+	gpm.ShowEntries(results)
+}
+
 func (gpm *GoPM) ShowEntries(entries []*Entry) {
 	var buffer bytes.Buffer
 	for _, entry := range entries {
@@ -76,3 +106,5 @@ func (gpm *GoPM) ShowEntries(entries []*Entry) {
 	}
 	gpm.tui.textView.SetText(buffer.String())
 }
+
+// func bufferedWrite()
