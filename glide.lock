@@ -1,0 +1,22 @@
+hash: d41a5c8cfcc1568370fbb3fa6b9bc8d156d0fa0809210ff4e83305b120d101fa
+updated: 2018-12-01T22:23:00.368764772+09:00
+imports:
+- name: github.com/gdamore/encoding
+  version: b23993cbb6353f0e6aa98d0ee318a34728f628b9
+- name: github.com/gdamore/tcell
+  version: 017915a4d77dabd7af10ab539e618a735d4b9c0a
+  subpackages:
+  - terminfo
+- name: github.com/lucasb-eyer/go-colorful
+  version: 12d3b2882a08d1abc9488e34f3e1ae35165f2d07
+- name: github.com/mattn/go-runewidth
+  version: c88d7e5f2e24de48a200a2655ac8a0910be9a0f7
+- name: github.com/rivo/tview
+  version: 0a18dea458148770d212d348f656988df75ff341
+- name: golang.org/x/text
+  version: 6f44c5a2ea40ee3593d98cdcc905cc1fdaa660e2
+  subpackages:
+  - encoding
+  - encoding/internal/identifier
+  - transform
+testImports: []

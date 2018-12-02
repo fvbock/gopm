@@ -1,0 +1,3 @@
+package: github.com/fvbock/gopm
+import:
+- package: github.com/rivo/tview
