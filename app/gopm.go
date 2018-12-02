@@ -65,6 +65,9 @@ func (gpm *GoPM) ScanFile(fname string) (entries []*Entry) {
 			entry.Text += fmt.Sprintf("%s\n", line)
 		}
 	}
+	if len(entry.Title) != 0 {
+		entries = append(entries, entry)
+	}
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
