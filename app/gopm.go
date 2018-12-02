@@ -2,6 +2,7 @@ package gopm
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -42,7 +43,7 @@ func (gpm *GoPM) ScanFile(fname string) (entries []*Entry) {
 	var entry *Entry
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println(line)
+		// fmt.Println(line)
 		if strings.HasPrefix(line, DELIMITER) {
 			entries = append(entries, entry)
 			newEntry = true
@@ -67,7 +68,11 @@ func (gpm *GoPM) ScanFile(fname string) (entries []*Entry) {
 }
 
 func (gpm *GoPM) ShowEntries(entries []*Entry) {
+	var buffer bytes.Buffer
 	for _, entry := range entries {
-		fmt.Fprintf(gpm.tui.textView, fmt.Sprintf("[#ff0000]%s[white]\n%s\n", entry.Title, entry.Text))
+		// buffer seems to get full
+		// fmt.Fprintf(gpm.tui.textView, fmt.Sprintf("[#ff0000]%s[white]\n%s\n", entry.Title, entry.Text))
+		buffer.WriteString(fmt.Sprintf("[#ff0000]%s[white]\n%s\n", entry.Title, entry.Text))
 	}
+	gpm.tui.textView.SetText(buffer.String())
 }

@@ -19,36 +19,38 @@ func (tui *TUI) checkAppLevelKeyFunctions(key tcell.Key) {
 }
 
 func NewTUI() (tui *TUI) {
-	app := tview.NewApplication()
+	tui = &TUI{}
 
-	textView := tview.NewTextView().
+	tui.app = tview.NewApplication()
+
+	tui.textView = tview.NewTextView().
 		SetDynamicColors(true).
 		SetRegions(true).
 		SetWordWrap(true).
 		SetChangedFunc(func() {
-			app.Draw()
+			tui.app.Draw()
 		})
 
-	inputField := tview.NewInputField().
+	tui.inputField = tview.NewInputField().
 		SetLabel(" 	What are you searching for: ").
 		SetPlaceholder("AWS Tokyo")
 		// SetFieldWidth(10).
 		// SetAcceptanceFunc(tview.InputFieldInteger).
 
-	inputField.SetDoneFunc(func(key tcell.Key) {
-		// checkAppLevelKeyFunctions(key)
+	tui.inputField.SetDoneFunc(func(key tcell.Key) {
+		tui.checkAppLevelKeyFunctions(key)
 
 		if key == tcell.KeyTab {
-			app.SetFocus(textView)
+			tui.app.SetFocus(tui.textView)
 		}
 	})
 
-	textView.SetDoneFunc(func(key tcell.Key) {
-		// checkAppLevelKeyFunctions(key)
+	tui.textView.SetDoneFunc(func(key tcell.Key) {
+		tui.checkAppLevelKeyFunctions(key)
 		// currentSelection := textView.GetHighlights()
 
 		if key == tcell.KeyTab {
-			app.SetFocus(inputField)
+			tui.app.SetFocus(tui.inputField)
 		}
 		// } else if key == tcell.KeyEnter {
 		// 	if len(currentSelection) > 0 {
@@ -69,19 +71,12 @@ func NewTUI() (tui *TUI) {
 		// }
 	})
 
-	textView.SetBorder(true)
+	tui.textView.SetBorder(true)
 
-	flex := tview.NewFlex().
+	tui.layout = tview.NewFlex().
 		SetDirection(tview.FlexRow).
-		AddItem(inputField, 1, 1, true).
-		AddItem(textView, 0, 1, false)
-
-	tui = &TUI{
-		app:        app,
-		inputField: inputField,
-		textView:   textView,
-		layout:     flex,
-	}
+		AddItem(tui.inputField, 1, 1, true).
+		AddItem(tui.textView, 0, 1, false)
 
 	return
 }
